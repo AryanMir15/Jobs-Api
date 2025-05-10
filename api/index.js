@@ -1,19 +1,20 @@
 require("dotenv").config();
+require("express-async-errors");
+
+// Import security packages
+const helmet = require("helmet");
+const cors = require("cors");
 
 const serverless = require("serverless-http");
-const connectDB = require("../db/connect");
-const app = require("../app");
+const connectDB = require('../db/connect');
+const app = require("../app"); 
 
-let isConnected = false;
+// Connect to the database
+connectDB(process.env.MONGO_URI);
 
-const handler = async (event, context) => {
-  if (!isConnected) {
-    await connectDB(process.env.MONGO_URI);
-    isConnected = true;
-  }
+// Add any security middleware (optional)
+app.use(helmet());
+app.use(cors());
 
-  const serverlessHandler = serverless(app);
-  return serverlessHandler(event, context);
-};
-
-module.exports.handler = handler;
+// Export the app as a serverless function for Vercel
+module.exports.handler = serverless(app);
