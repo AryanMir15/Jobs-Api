@@ -10,11 +10,11 @@ const limiter = require("express-rate-limit");
 const express = require("express");
 const app = express();
 
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 const auth = require("./middleware/authentication");
 
 // connectDB
-const connectDB = require("./db/connect");
+// const connectDB = require("./db/connect");
 
 // routers
 const authRoute = require("./routes/auth");
@@ -42,7 +42,7 @@ app.use(xss());
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/jobs", auth, jobsRoute);
 app.use("/", (req, res) => {
-  app.send("JOBS-API")
+  res.send("JOBS-API")
 })
 
 // error handler
@@ -51,22 +51,8 @@ app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 3000;
 
-const start = async () => {
-  try {
-    await connectDB(process.env.MONGO_URI);
-    await mongoose.connection
-      .collection("users")
-      .createIndex({ email: 1 }, { unique: true });
+module.exports = app;
 
-    app.listen(port, () =>
-      console.log(`Server is listening on port ${port}...`)
-    );
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-start();
 
 // Day 1
 // 06/04/2025 | 6:35:13 => 6:49:12;
