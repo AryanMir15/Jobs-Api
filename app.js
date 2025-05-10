@@ -42,7 +42,7 @@ app.use(xss());
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/jobs", auth, jobsRoute);
 app.use("/", (req, res) => {
-  app.res("JOBS-API")
+  app.send("JOBS-API")
 })
 
 // error handler
