@@ -17,4 +17,4 @@ app.use(helmet());
 app.use(cors());
 
 // Export the handler function
-module.exports.handler = serverless(app);
+module.exports = serverless(app);
