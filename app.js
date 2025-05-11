@@ -23,7 +23,7 @@ const jobsRoute = require("./routes/jobs");
 // error handler
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
-const connectDB = require("./db/connect");
+// const connectDB = require("./db/connect");
 
 app.set("trust proxy", 1);
 app.use(
