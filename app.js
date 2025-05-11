@@ -10,11 +10,11 @@ const limiter = require("express-rate-limit");
 const express = require("express");
 const app = express();
 
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const auth = require("./middleware/authentication");
 
 // connectDB
-// const connectDB = require("./db/connect");
+const connectDB = require("./db/connect");
 
 // routers
 const authRoute = require("./routes/auth");
@@ -23,6 +23,7 @@ const jobsRoute = require("./routes/jobs");
 // error handler
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
+const connectDB = require("./db/connect");
 
 app.set("trust proxy", 1);
 app.use(
@@ -51,7 +52,22 @@ app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 3000;
 
-module.exports = app;
+const start = async () => {
+  try {
+    await connectDB(process.env.MONGO_URI);
+    await mongoose.connection
+      .collection("users")
+      .createIndex({ email: 1 }, { unique: true });
+
+    app.listen(port, () =>
+      console.log(`Server is listening on port ${port}...`)
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+start();
 
 
 // Day 1
